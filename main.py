@@ -1,4 +1,7 @@
 import requests
+import json
+import os
+import re
 
 response = requests.get("https://wizard-world-api.herokuapp.com/Wizards")
 if response.status_code == 200:
