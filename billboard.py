@@ -28,7 +28,7 @@ def top_hundred_songs():
     tags = soup.find_all('div', class_='o-chart-results-list-row-container')
     for tag in tags:
         # song ranking
-        data = tag.find('span', class_='c-label  a-font-primary-bold-l u-font-size-32@tablet u-letter-spacing-0080@tablet')
+        data = tag.find('span', class_='c-label')
         ranking = 0
         if data:
             ranking = int(data.text)
@@ -38,16 +38,17 @@ def top_hundred_songs():
         data = tag.find('h3', class_='c-title')
         songName = ""
         if data:
-            songName = data.text
+            songName = data.text.strip('\n\t')
 
         # artists
         data = tag.find('span', class_='c-label')
         artists = []
         if data:
-            result = re.split(r'\s*FEATURING\s*|,\s*|&\s*', data.text)
-            artists.extend(result)
+            result = re.split(r'\s*FEATURING\s*|,\s*|&\s*', data.text.strip('\n\t'))
+            for artist in result:
+                artists.append(artist.rstrip())
         
-        songs[songName] = {"ranking" : ranking, "artist(s)" : artists}
+        songs[songName] = {"ranking" : ranking, "artists" : artists}
 
     return songs
 
@@ -86,6 +87,11 @@ class TestCases(unittest.TestCase):
             self.assertGreater(len(artists), 0)
             for artist in artists:
                 self.assertEqual(type(artist), str)
+        
+        # look at all songs
+        print("----")
+        for song, data in songs.items():
+            print(f"{song} --> {data}")
 
 
 def main (): 
