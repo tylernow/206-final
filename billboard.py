@@ -2,7 +2,6 @@ from bs4 import BeautifulSoup
 import re
 import unittest
 import os
-import csv
 import requests
 
 """
@@ -28,23 +27,25 @@ def top_hundred_songs():
     songs = {}
     tags = soup.find_all('div', class_='o-chart-results-list-row-container')
     for tag in tags:
-        # song name
-        data = tag.find()
-        songName = ""
-        if data:
-            songName = data.text
-        
         # song ranking
-        data = tag.find()
+        data = tag.find('span', class_='c-label  a-font-primary-bold-l u-font-size-32@tablet u-letter-spacing-0080@tablet')
         ranking = 0
         if data:
             ranking = int(data.text)
-        
+
+        tag = tag.find('ul', class_='lrv-a-unstyle-list lrv-u-flex lrv-u-height-100p lrv-u-flex-direction-column@mobile-max')
+        # song name
+        data = tag.find('h3', class_='c-title')
+        songName = ""
+        if data:
+            songName = data.text
+
         # artists
-        data = tag.find_all()
+        data = tag.find('span', class_='c-label')
         artists = []
         if data:
-            artists = data
+            result = re.split(r'\s*FEATURING\s*|,\s*|&\s*', data.text)
+            artists.extend(result)
         
         songs[songName] = {"ranking" : ranking, "artist(s)" : artists}
 
@@ -55,6 +56,7 @@ def make_database(filename, data):
     INPUT: filename to make database in, dictionary (from top_hundred_songs()) to send to database
     Returns: None
     """
+    pass
 
 
 class TestCases(unittest.TestCase):
@@ -87,8 +89,7 @@ class TestCases(unittest.TestCase):
 
 
 def main (): 
-    detailed_data = create_listing_database("html_files/search_results.html")
-    output_csv(detailed_data, "airbnb_dataset.csv")
+    make_database("billboardTopSongs", top_hundred_songs())
 
 if __name__ == '__main__':
     # main()
