@@ -1,36 +1,45 @@
-import requests
-import json
-import os
-import re
-import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
+from billboard import top_hundred_songs
+from spotify_data import fetch_spotify_data
+from database import (
+    create_music_db,
+    insert_album,
+    insert_artist,
+    insert_song,
+    insert_artist_top_tracks,
+    song_rank_exists
+)
 
+# Step 1: Get Billboard Top 100 songs
+billboard_data = top_hundred_songs()
 
-# Function to retrieve the spotify id and api key
-def load_spotify_credentials(filepath='spotify_credentials.txt'):
-    credentials = {}
-    with open(filepath, 'r') as f:
-        for line in f:
-            if '=' in line:
-                key, value = line.strip().split('=', 1)
-                credentials[key.strip()] = value.strip()
-    return credentials
+# Step 2: Filter out songs already in the database
+unprocessed_data = {}
+for name, info in billboard_data.items():
+    if not song_rank_exists(info['ranking']):
+        unprocessed_data[name] = info
+    if len(unprocessed_data) == 25:
+        break
 
+if not unprocessed_data:
+    print("✅ All 100 songs have already been processed.")
+    exit()
 
-# Step 1: Authenticate using Client Credentials Flow
-creds = load_spotify_credentials()
-client_id = creds.get('client_id')
-client_secret = creds.get('client_secret')
+# Step 3: Get Spotify data for the next 25 unprocessed songs
+song_db, artist_db = fetch_spotify_data(unprocessed_data, limit=25)
 
-auth_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
-sp = spotipy.Spotify(auth_manager=auth_manager)
+# Step 4: Initialize the database and create tables (non-destructive)
+create_music_db()
 
-# Step 2: Get track info by ID (example: "3n3Ppam7vgaVa1iaRUc9Lp" is a valid track ID for Eminem's "Lose Yourself")
-track_id = '3n3Ppam7vgaVa1iaRUc9Lp'
-track = sp.track(track_id)
+# Step 5: Insert song and artist data into the database
+for rank, song in song_db.items():
+    album_id = insert_album(song['album'], song['album_release_date'])
+    insert_song(song['song_name'], rank, song['popularity'], album_id)
 
-# Step 3: Print info
-print("Track Name:", track['name'])
-print("Artist:", track['artists'][0]['name'])
-print("Album:", track['album']['name'])
-print("Duration (ms):", track['duration_ms'])
+    for artist_name in song['artists']:
+        artist_id = insert_artist(artist_name)
+
+        if artist_name in artist_db:
+            insert_artist_top_tracks(artist_id, artist_db[artist_name])
+
+print(f"\n✅ Successfully processed and inserted {len(song_db)} new songs into the database.\n")
+print(len(song_db))
