@@ -1,0 +1,25 @@
+🎤 Top 10 Artists by # of Top 100 Songs:
+           artist  song_count
+Sabrina Carpenter          16
+    Chappell Roan           9
+   Kendrick Lamar           8
+    Morgan Wallen           6
+      Alex Warren           4
+     Benson Boone           4
+       Bruno Mars           4
+        Lady Gaga           4
+        Shaboozey           4
+      Teddy Swims           4
+
+🔥 Top 10 Artists by Total Popularity:
+           artist  total_popularity
+Sabrina Carpenter              1440
+    Chappell Roan               813
+   Kendrick Lamar               768
+    Morgan Wallen               522
+       Bruno Mars               390
+        Lady Gaga               386
+     Benson Boone               348
+        Shaboozey               338
+      Teddy Swims               336
+      Alex Warren               326
