@@ -19,7 +19,11 @@ def connect_to_music_data():
 
 def graph_scatter_rank_vs_popularity(cur):
     """
-    Graph scatter plot on Billboard rank vs Spotify popularity.
+    Graphs scatter plot on Billboard rank vs Spotify popularity.
+
+    Parameters - database cursor
+
+    Returns - nothing
     """
     ### retrieve ranks and popularities
     rank = []
@@ -66,18 +70,30 @@ def graph_scatter_rank_vs_popularity(cur):
 def graph_scatter_album_release_vs_rank(cur):
     """
     Graph scatter plot of album release date vs rank for each song.
+
+    Parameters - database cursor
+
+    Returns - nothing
     """
     pass
 
 def graph__bar_top_artists_by_song_count(cur):
     """
     Graph bar graph of number of top songs each artist has.
+
+    Parameters - database cursor
+
+    Returns - nothing
     """
     pass
 
 def graph_pie_artist_popularity_sum(cur):
     """
     Make a pie chart of artists by the sum of the popularity of their top songs.
+
+    Parameters - database cursor
+
+    Returns - nothing
     """
     pass
 
