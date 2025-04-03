@@ -69,13 +69,56 @@ def graph_scatter_rank_vs_popularity(cur):
 
 def graph_scatter_album_release_vs_rank(cur):
     """
-    Graph scatter plot of album release date vs rank for each song.
+    Graphs scatter plot of album release date vs rank for each song.
 
     Parameters - database cursor
 
     Returns - nothing
     """
-    pass
+    # get data
+    releaseDate = []
+    rank = []
+    cur.execute(
+        """
+        SELECT Albums.release_date, Songs.rank
+        FROM Songs
+        JOIN Albums ON Albums.id = Songs.album_id
+        WHERE Albums.release_date IS NOT NULL
+        ORDER BY Albums.release_date
+        """
+    )
+    result = cur.fetchall()
+    # process results
+    for row in result:
+        d = row[0]
+        r = row[1]
+
+        releaseDate.append(d)
+        rank.append(r)
+    
+    # TODO: fix data label issue
+    # print(releaseDate[0], releaseDate[-1])
+    # min_year = releaseDate[0][0:3] + "-01-01"
+    # max_year = releaseDate[-1][0:3] + "-12-31"
+    
+    ### make plot
+    # create the graph
+    fig, ax = plt.subplots()
+    ax.scatter(releaseDate, rank, marker='^', s=55, facecolors='plum', edgecolors='indigo', linewidths=0.3)
+    
+    # start at origin
+    ax.set_ylim(bottom=0)
+    # label everything
+    ax.set_xlabel('Release Date')
+    ax.set_ylabel('Billboard Rank')
+    ax.set_title('Album Release Date vs Billboard Rank for Top 100 Songs')
+    ax.grid()
+
+    # save the graph
+    fig.savefig("albumRelease_vs_rank.png")
+
+    # show the graph
+    plt.show()    
 
 def graph__bar_top_artists_by_song_count(cur):
     """
@@ -100,8 +143,8 @@ def graph_pie_artist_popularity_sum(cur):
 # make all visuals
 if __name__ == "__main__":
     cur, conn = connect_to_music_data()
-    graph_scatter_rank_vs_popularity(cur)
+    # graph_scatter_rank_vs_popularity(cur)
     graph_scatter_album_release_vs_rank(cur)
-    graph__bar_top_artists_by_song_count(cur)
-    graph_pie_artist_popularity_sum(cur)
+    # graph__bar_top_artists_by_song_count(cur)
+    # graph_pie_artist_popularity_sum(cur)
     conn.close()
