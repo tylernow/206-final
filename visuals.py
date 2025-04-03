@@ -95,12 +95,7 @@ def graph_scatter_album_release_vs_rank(cur):
 
         releaseDate.append(d)
         rank.append(r)
-    
-    # TODO: fix data label issue
-    # print(releaseDate[0], releaseDate[-1])
-    # min_year = releaseDate[0][0:3] + "-01-01"
-    # max_year = releaseDate[-1][0:3] + "-12-31"
-    
+        
     ### make plot
     # create the graph
     fig, ax = plt.subplots()
@@ -108,6 +103,7 @@ def graph_scatter_album_release_vs_rank(cur):
     
     # start at origin
     ax.set_ylim(bottom=0)
+    ax.set_xticks([min(releaseDate), (releaseDate[len(releaseDate) // 3]), max(releaseDate)])
     # label everything
     ax.set_xlabel('Release Date')
     ax.set_ylabel('Billboard Rank')
