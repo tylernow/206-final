@@ -209,7 +209,7 @@ def graph_pie_artist_popularity_sum(cur):
     ### make plot
     # create the graph
     fig, ax = plt.subplots()
-    colors = ['purple', 'forestgreen', 'slateblue', 'ivory', 'green', 'pink', 'gray', 'lightcyan', 'plum', 'blue', 'lightgray']
+    colors = ['pink', 'purple', 'lightgray', 'lightgreen', 'ivory', 'slateblue', 'thistle', 'darkgreen', 'lightcyan', 'plum', 'cadetblue']
     explode = (0.15, 0.1, 0.075, 0.05, 0.01, 0, 0, 0, 0, 0, 0)
 
     plt.pie(popularity, explode=explode, labels=artist, colors=colors,
@@ -230,5 +230,5 @@ if __name__ == "__main__":
     # graph_scatter_rank_vs_popularity(cur)
     # graph_scatter_album_release_vs_rank(cur) ## TODO -- complete labeling
     # graph__bar_top_artists_by_song_count(cur)
-    # graph_pie_artist_popularity_sum(cur)
+    graph_pie_artist_popularity_sum(cur)
     conn.close()
