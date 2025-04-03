@@ -176,13 +176,59 @@ def graph_pie_artist_popularity_sum(cur):
 
     Returns - nothing
     """
-    pass
+    popularity = []
+    artist = []
+    # collect data
+    cur.execute(
+        """
+        SELECT Artists.name AS artist, SUM(Songs.popularity) AS total_popularity
+        FROM Songs
+        JOIN ArtistTopTracks ON Songs.name = ArtistTopTracks.track_name
+        JOIN Artists ON ArtistTopTracks.artist_id = Artists.id
+        GROUP BY Artists.name
+        ORDER BY total_popularity DESC
+        """
+    )
+    # process results
+    result = cur.fetchall()
+    remaining = 0
+    count = 0
+    for row in result:
+        if(count < 10):
+            a = row[0]
+            p = row[1]
+
+            artist.append(a)
+            popularity.append(p)
+            count += 1
+        else:
+            remaining += row[1]
+    artist.append("Other")
+    popularity.append(remaining)
+
+    ### make plot
+    # create the graph
+    fig, ax = plt.subplots()
+    colors = ['purple', 'forestgreen', 'slateblue', 'ivory', 'green', 'pink', 'gray', 'lightcyan', 'plum', 'blue', 'lightgray']
+    explode = (0.15, 0.1, 0.075, 0.05, 0.01, 0, 0, 0, 0, 0, 0)
+
+    plt.pie(popularity, explode=explode, labels=artist, colors=colors,
+        autopct='%3.1f%%', shadow=True, startangle=100)
+ 
+    # label everything
+    plt.axis('equal')
+
+    # save the graph
+    fig.savefig("artists_by_popularity.png")
+
+    # show the graph
+    plt.show()    
 
 # make all visuals
 if __name__ == "__main__":
     cur, conn = connect_to_music_data()
     # graph_scatter_rank_vs_popularity(cur)
     # graph_scatter_album_release_vs_rank(cur) ## TODO -- complete labeling
-    graph__bar_top_artists_by_song_count(cur)
-    # graph_pie_artist_popularity_sum(cur)
+    # graph__bar_top_artists_by_song_count(cur)
+    graph_pie_artist_popularity_sum(cur)
     conn.close()
