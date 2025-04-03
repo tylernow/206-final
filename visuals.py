@@ -230,5 +230,5 @@ if __name__ == "__main__":
     # graph_scatter_rank_vs_popularity(cur)
     # graph_scatter_album_release_vs_rank(cur) ## TODO -- complete labeling
     # graph__bar_top_artists_by_song_count(cur)
-    graph_pie_artist_popularity_sum(cur)
+    # graph_pie_artist_popularity_sum(cur)
     conn.close()
