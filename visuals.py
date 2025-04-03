@@ -2,6 +2,7 @@ import sqlite3
 import os
 import matplotlib
 import matplotlib.pyplot as plt
+import numpy as np
 
 def connect_to_music_data():
     """
@@ -95,7 +96,7 @@ def graph_scatter_album_release_vs_rank(cur):
 
         releaseDate.append(d)
         rank.append(r)
-        
+
     ### make plot
     # create the graph
     fig, ax = plt.subplots()
@@ -124,7 +125,48 @@ def graph__bar_top_artists_by_song_count(cur):
 
     Returns - nothing
     """
-    pass
+    # get data
+    artist = []
+    count = []
+    cur.execute(
+        """
+        SELECT Artists.name AS artist, COUNT(*) AS song_count
+        FROM Songs
+        JOIN ArtistTopTracks ON Songs.name = ArtistTopTracks.track_name
+        JOIN Artists ON ArtistTopTracks.artist_id = Artists.id
+        GROUP BY Artists.name
+        ORDER BY song_count
+        """
+    )
+    results = cur.fetchall()
+    for row in results:
+        a = row[0]
+        c = row[1]
+
+        artist.append(a)
+        count.append(c)
+
+
+    ### make plot
+    # create the graph
+    fig, ax = plt.subplots()
+
+    width = 0.5
+    colors = ['lightblue', 'mediumslateblue']
+    ax.barh(artist, count, width, color=colors, edgecolor='black', hatch='/')
+
+    # label everything
+    ax.set_xlabel('Number of Top Songs')
+    ax.set_ylabel('Artist')
+    ax.set_title('Artists With Top Ranking Songs')
+    ax.grid()
+
+    # save the graph
+    fig.savefig("top_artists_by_song.png")
+
+    # show the graph
+    plt.show()    
+
 
 def graph_pie_artist_popularity_sum(cur):
     """
@@ -140,7 +182,7 @@ def graph_pie_artist_popularity_sum(cur):
 if __name__ == "__main__":
     cur, conn = connect_to_music_data()
     # graph_scatter_rank_vs_popularity(cur)
-    graph_scatter_album_release_vs_rank(cur)
-    # graph__bar_top_artists_by_song_count(cur)
+    # graph_scatter_album_release_vs_rank(cur) ## TODO -- complete labeling
+    graph__bar_top_artists_by_song_count(cur)
     # graph_pie_artist_popularity_sum(cur)
     conn.close()
