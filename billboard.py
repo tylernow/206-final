@@ -52,14 +52,6 @@ def top_hundred_songs():
 
     return songs
 
-def make_database(filename, data):
-    """
-    INPUT: filename to make database in, dictionary (from top_hundred_songs()) to send to database
-    Returns: None
-    """
-    pass
-
-
 class TestCases(unittest.TestCase):
     def test_top_hundred_songs(self):
         songs = top_hundred_songs()
@@ -93,10 +85,6 @@ class TestCases(unittest.TestCase):
         for song, data in songs.items():
             print(f"{song} --> {data}")
 
-
-def main (): 
-    make_database("billboardTopSongs", top_hundred_songs())
-
+# check that all functions work as expected
 if __name__ == '__main__':
-    # main()
     unittest.main(verbosity=2)
