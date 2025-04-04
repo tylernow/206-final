@@ -104,9 +104,13 @@ def graph_scatter_album_release_vs_rank(cur):
     ax.scatter(releaseDate, rank, marker='^', s=55, facecolors='plum', edgecolors='indigo', linewidths=0.3)
     
     # start at origin
+    prev_year = []
     labels = []
-    for i in range(0, len(releaseDate), len(releaseDate) // 3):
-        labels.append(releaseDate[i])
+    for i in range(0, len(releaseDate)):
+        y = releaseDate[i][:4]
+        if y not in prev_year:
+            prev_year.append(y)
+            labels.append(releaseDate[i])
     ax.set_ylim(bottom=0)
     ax.set_xticks(labels)
     # label everything
