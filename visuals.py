@@ -91,8 +91,9 @@ def graph_scatter_album_release_vs_rank(cur):
     result = cur.fetchall()
     # process results
     for row in result:
-        d = row[0]
+        d = row[0][:7]
         r = row[1]
+        y = d[0:4]
 
         releaseDate.append(d)
         rank.append(r)
@@ -103,10 +104,13 @@ def graph_scatter_album_release_vs_rank(cur):
     ax.scatter(releaseDate, rank, marker='^', s=55, facecolors='plum', edgecolors='indigo', linewidths=0.3)
     
     # start at origin
+    labels = []
+    for i in range(0, len(releaseDate), len(releaseDate) // 3):
+        labels.append(releaseDate[i])
     ax.set_ylim(bottom=0)
-    ax.set_xticks([min(releaseDate), (releaseDate[len(releaseDate) // 3]), max(releaseDate)])
+    ax.set_xticks(labels)
     # label everything
-    ax.set_xlabel('Release Date')
+    ax.set_xlabel('Release Date (YY-MM)')
     ax.set_ylabel('Billboard Rank')
     ax.set_title('Album Release Date vs Billboard Rank for Top 100 Songs')
     ax.grid()
@@ -228,7 +232,7 @@ def graph_pie_artist_popularity_sum(cur):
 if __name__ == "__main__":
     cur, conn = connect_to_music_data()
     # graph_scatter_rank_vs_popularity(cur)
-    # graph_scatter_album_release_vs_rank(cur) ## TODO -- complete labeling
+    graph_scatter_album_release_vs_rank(cur) ## TODO -- complete labeling
     # graph__bar_top_artists_by_song_count(cur)
     # graph_pie_artist_popularity_sum(cur)
     conn.close()
