@@ -16,7 +16,7 @@ An example of that within the function would be:
 def top_hundred_songs(): 
     """
     INPUT: none
-    Returns: a dictionary called songs, where each song has a dictionary with an integer ranking value and a list of their artists
+    OUTPUT: a dictionary called songs, where each song has a dictionary with an integer ranking value and a list of their artists
     """
     # make beautiful soup
     url = f"https://www.billboard.com/charts/hot-100/"

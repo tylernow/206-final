@@ -8,9 +8,9 @@ def connect_to_music_data():
     """
     Sets up a SQLite database connection and cursor to music_data.
 
-    Parameters - NONE
+    INPUT - NONE
 
-    Returns - Tuple (cursor, connection)
+    OUPUT - Tuple (cursor, connection)
 
     """
     path = os.path.dirname(os.path.abspath(__file__))
@@ -22,9 +22,9 @@ def graph_scatter_rank_vs_popularity(cur):
     """
     Graphs scatter plot on Billboard rank vs Spotify popularity.
 
-    Parameters - database cursor
+    INPUT - database cursor
 
-    Returns - nothing
+    OUTPUT - None
     """
     ### retrieve ranks and popularities
     rank = []
@@ -72,9 +72,9 @@ def graph_scatter_album_release_vs_rank(cur):
     """
     Graphs scatter plot of album release date vs rank for each song.
 
-    Parameters - database cursor
+    INPUT - database cursor
 
-    Returns - nothing
+    OUTPUT - None
     """
     # get data
     releaseDate = []
@@ -121,9 +121,9 @@ def graph__bar_top_artists_by_song_count(cur):
     """
     Graph bar graph of number of top songs each artist has.
 
-    Parameters - database cursor
+    INPUT - database cursor
 
-    Returns - nothing
+    OUTPUT - None
     """
     # get data
     artist = []
@@ -172,9 +172,9 @@ def graph_pie_artist_popularity_sum(cur):
     """
     Make a pie chart of artists by the sum of the popularity of their top songs.
 
-    Parameters - database cursor
+    INPUT - database cursor
 
-    Returns - nothing
+    OUTPUT - None
     """
     popularity = []
     artist = []
@@ -230,5 +230,5 @@ if __name__ == "__main__":
     # graph_scatter_rank_vs_popularity(cur)
     # graph_scatter_album_release_vs_rank(cur) ## TODO -- complete labeling
     # graph__bar_top_artists_by_song_count(cur)
-    graph_pie_artist_popularity_sum(cur)
+    # graph_pie_artist_popularity_sum(cur)
     conn.close()
