@@ -63,7 +63,7 @@ def graph_scatter_rank_vs_popularity(cur):
     ax.grid()
 
     # save the graph
-    fig.savefig("rank_vs_popularity.png")
+    fig.savefig("rank_vs_popularity.png", bbox_inches='tight')
 
     # show the graph
     plt.show()
@@ -128,11 +128,12 @@ def graph_scatter_album_release_vs_rank(cur):
     ### make plot
     # create the graph
     fig, ax = plt.subplots()
-    colors = ['darkblue', 'lightblue', 'pink', 'aqua', 'lightgray']
+
+    colors = ['darkblue', 'lightblue', 'turquoise', 'pink', 'lightgray']
     c = -1
     for year, months in years.items():
         c += 1
-        ax.scatter(monthMarks, months, facecolors=colors[c], edgecolors='indigo', linewidths=0.3, label=year)
+        ax.scatter(monthMarks, months, s=65, facecolors=colors[c], edgecolors='indigo', linewidths=0.5, label=year)
     
     # start at origin
     ax.set_ylim(bottom=0)
@@ -141,11 +142,11 @@ def graph_scatter_album_release_vs_rank(cur):
     ax.set_xlabel('Release Date (MM)')
     ax.set_ylabel('Number of Billboard Ranking Songs')
     ax.legend()
-    ax.set_title(f"'Number of Billboard Ranking Songs per Album Release Date as of {prevYear}-{monthMarks[prevMonth]}")
+    ax.set_title(f"Number of Billboard Ranking Songs per Album Release Date as of {prevYear}-{monthMarks[prevMonth]} (YY-MM)")
     ax.grid()
 
     # save the graph
-    fig.savefig("albumRelease_vs_rank.png")
+    fig.savefig("albumRelease_vs_rank.png", bbox_inches='tight')
 
     # show the graph
     plt.show()    
@@ -195,7 +196,7 @@ def graph__bar_top_artists_by_song_count(cur):
     ax.grid()
 
     # save the graph
-    fig.savefig("top_artists_by_song.png")
+    fig.savefig("top_artists_by_song.png", bbox_inches='tight')
 
     # show the graph
     plt.show()    
@@ -252,7 +253,7 @@ def graph_pie_artist_popularity_sum(cur):
     plt.axis('equal')
 
     # save the graph
-    fig.savefig("artists_by_popularity.png")
+    fig.savefig("artists_by_popularity.png", bbox_inches='tight')
 
     # show the graph
     plt.show()    
@@ -260,8 +261,8 @@ def graph_pie_artist_popularity_sum(cur):
 # make all visuals
 if __name__ == "__main__":
     cur, conn = connect_to_music_data()
-    # graph_scatter_rank_vs_popularity(cur)
-    graph_scatter_album_release_vs_rank(cur) ## TODO -- complete labeling
-    # graph__bar_top_artists_by_song_count(cur)
-    # graph_pie_artist_popularity_sum(cur)
+    graph_scatter_rank_vs_popularity(cur)
+    graph_scatter_album_release_vs_rank(cur)
+    graph__bar_top_artists_by_song_count(cur)
+    graph_pie_artist_popularity_sum(cur)
     conn.close()
