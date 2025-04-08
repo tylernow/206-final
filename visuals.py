@@ -10,7 +10,7 @@ def connect_to_music_data():
 
     INPUT - NONE
 
-    OUPUT - Tuple (cursor, connection)
+    RETURNS - Tuple (cursor, connection)
 
     """
     path = os.path.dirname(os.path.abspath(__file__))
@@ -23,8 +23,8 @@ def graph_scatter_rank_vs_popularity(cur):
     Graphs scatter plot on Billboard rank vs Spotify popularity.
 
     INPUT - database cursor
-
-    OUTPUT - None
+    OUTPUT - scatter plot of rank vs popularity
+    RETURN - None
     """
     ### retrieve ranks and popularities
     rank = []
@@ -71,8 +71,8 @@ def graph_scatter_album_release_rank_num(cur):
     Graphs scatter plot of number of billboard ranking songs per album release date by year.
 
     INPUT - database cursor
-
-    OUTPUT - None
+    OUTPUT - scatter plot of number of ranking songs per release date by year
+    RETURN - None
     """
     # get data
     releaseDate = []
@@ -150,8 +150,8 @@ def graph__bar_top_artists_by_song_count(cur):
     Graph bar graph of number of top songs each artist has.
 
     INPUT - database cursor
-
-    OUTPUT - None
+    OUTPUT - bar graph of number of top songs per artist
+    RETURN - None
     """
     # get data
     artist = []
@@ -198,11 +198,12 @@ def graph__bar_top_artists_by_song_count(cur):
 
 def graph_pie_artist_popularity_sum(cur):
     """
-    Make a pie chart of artists by the sum of the popularity of their top songs.
+    Makes a pie chart of artists by the sum of the popularity of their top songs.
+    Special focus on the top 10 artists.
 
     INPUT - database cursor
-
-    OUTPUT - None
+    OUTPUT - pie chart of artists by sum of ranking song popularities
+    RETURN - None
     """
     popularity = []
     artist = []
@@ -256,8 +257,8 @@ def graph_pie_artist_popularity_sum(cur):
 # make all visuals
 if __name__ == "__main__":
     cur, conn = connect_to_music_data()
-    # graph_scatter_rank_vs_popularity(cur)
-    # graph_scatter_album_release_rank_num(cur)
-    # graph__bar_top_artists_by_song_count(cur)
+    graph_scatter_rank_vs_popularity(cur)
+    graph_scatter_album_release_rank_num(cur)
+    graph__bar_top_artists_by_song_count(cur)
     graph_pie_artist_popularity_sum(cur)
     conn.close()
