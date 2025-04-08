@@ -49,17 +49,15 @@ def graph_scatter_rank_vs_popularity(cur):
     ### make plot
     # create the graph
     fig, ax = plt.subplots()
-    ax.plot(rank, rank, color='brown', label="Billboard Rank")
-    ax.scatter(rank, popularity, marker='*', s=55, facecolors='gold', edgecolors='black', linewidths=0.3, label="Spotify Popularity")
+    ax.scatter(rank, popularity, marker='*', s=50, facecolors='gold', edgecolors='black', linewidths=0.3, label="Spotify Popularity")
     
     # start at origin
     ax.set_xlim(left=0)
     ax.set_ylim(bottom=0)
     # label everything
-    ax.set_xlabel('Ranking')
-    ax.set_ylabel('Value')
+    ax.set_xlabel('Billboard Ranking')
+    ax.set_ylabel('Spotify Popularity')
     ax.set_title('Billboard Rank vs Spotify Popularity for Top 100 Songs')
-    ax.legend()
     ax.grid()
 
     # save the graph
@@ -68,9 +66,9 @@ def graph_scatter_rank_vs_popularity(cur):
     # show the graph
     plt.show()
 
-def graph_scatter_album_release_vs_rank(cur):
+def graph_scatter_album_release_rank_num(cur):
     """
-    Graphs scatter plot of album release date vs rank for each song.
+    Graphs scatter plot of number of billboard ranking songs per album release date by year.
 
     INPUT - database cursor
 
@@ -78,10 +76,9 @@ def graph_scatter_album_release_vs_rank(cur):
     """
     # get data
     releaseDate = []
-    rank = []
     cur.execute(
         """
-        SELECT Albums.release_date, Songs.rank
+        SELECT Albums.release_date
         FROM Songs
         JOIN Albums ON Albums.id = Songs.album_id
         WHERE Albums.release_date IS NOT NULL
@@ -92,11 +89,9 @@ def graph_scatter_album_release_vs_rank(cur):
     # process results
     for row in result:
         d = row[0][:7]
-        r = row[1]
         y = d[0:4]
 
         releaseDate.append(d)
-        rank.append(r)
     
     # split release dates
     years = {}
@@ -137,16 +132,15 @@ def graph_scatter_album_release_vs_rank(cur):
     
     # start at origin
     ax.set_ylim(bottom=0)
-    # ax.set_xticks(monthMarks)
     # label everything
     ax.set_xlabel('Release Date (MM)')
     ax.set_ylabel('Number of Billboard Ranking Songs')
     ax.legend()
-    ax.set_title(f"Number of Billboard Ranking Songs per Album Release Date as of {prevYear}-{monthMarks[prevMonth]} (YY-MM)")
+    ax.set_title(f"Number of Billboard Ranking Songs per Album Release Date as of {prevYear}-{monthMarks[prevMonth]} (YYYY-MM)")
     ax.grid()
 
     # save the graph
-    fig.savefig("albumRelease_vs_rank.png", bbox_inches='tight')
+    fig.savefig("rank_byalbumRelease.png", bbox_inches='tight')
 
     # show the graph
     plt.show()    
@@ -192,7 +186,7 @@ def graph__bar_top_artists_by_song_count(cur):
     # label everything
     ax.set_xlabel('Number of Top Songs')
     ax.set_ylabel('Artist')
-    ax.set_title('Artists With Top Ranking Songs')
+    ax.set_title('Top Artists by Number of Ranking Songs')
     ax.grid()
 
     # save the graph
@@ -223,7 +217,7 @@ def graph_pie_artist_popularity_sum(cur):
         ORDER BY total_popularity DESC
         """
     )
-    # process results
+    # process results -- save top 10 artists
     result = cur.fetchall()
     remaining = 0
     count = 0
@@ -244,10 +238,11 @@ def graph_pie_artist_popularity_sum(cur):
     # create the graph
     fig, ax = plt.subplots()
     colors = ['pink', 'purple', 'lightgray', 'lightgreen', 'ivory', 'slateblue', 'thistle', 'darkgreen', 'lightcyan', 'plum', 'cadetblue']
-    explode = (0.15, 0.1, 0.075, 0.05, 0.01, 0, 0, 0, 0, 0, 0)
+    explode = (0.18, 0.16, 0.14, 0.12, 0.1, 0.08, 0.07, 0.06, 0.05, 0.04, 0.03)
+    ax.set_title('Percent of Artists with Ranking Songs')
 
     plt.pie(popularity, explode=explode, labels=artist, colors=colors,
-        autopct='%3.1f%%', shadow=True, startangle=100)
+        autopct='%1.1f%%', shadow=True, startangle=100)
  
     # label everything
     plt.axis('equal')
@@ -261,8 +256,8 @@ def graph_pie_artist_popularity_sum(cur):
 # make all visuals
 if __name__ == "__main__":
     cur, conn = connect_to_music_data()
-    graph_scatter_rank_vs_popularity(cur)
-    graph_scatter_album_release_vs_rank(cur)
-    graph__bar_top_artists_by_song_count(cur)
+    # graph_scatter_rank_vs_popularity(cur)
+    # graph_scatter_album_release_rank_num(cur)
+    # graph__bar_top_artists_by_song_count(cur)
     graph_pie_artist_popularity_sum(cur)
     conn.close()
