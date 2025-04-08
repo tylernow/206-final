@@ -97,26 +97,51 @@ def graph_scatter_album_release_vs_rank(cur):
 
         releaseDate.append(d)
         rank.append(r)
+    
+    # split release dates
+    years = {}
+    monthMarks = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+    prevMonth = 0
+    prevYear = ''
+    for date in range(len(releaseDate)):
+        y = releaseDate[date][:4]
+        m = releaseDate[date][-2:]
+        
+        if y != prevYear:
+            prevYear = y
+            years[prevYear] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            
+            prevMonth = 0
+            for i in range(len(monthMarks)):
+                if monthMarks[prevMonth] == m:
+                    break
+                prevMonth += 1
+            years[prevYear][prevMonth] += 1
+            continue
+        
+        while m != monthMarks[prevMonth]:
+            prevMonth += 1
+        
+        years[prevYear][prevMonth] += 1
+    
 
     ### make plot
     # create the graph
     fig, ax = plt.subplots()
-    ax.scatter(releaseDate, rank, marker='^', s=55, facecolors='plum', edgecolors='indigo', linewidths=0.3)
+    colors = ['darkblue', 'lightblue', 'pink', 'aqua', 'lightgray']
+    c = -1
+    for year, months in years.items():
+        c += 1
+        ax.scatter(monthMarks, months, facecolors=colors[c], edgecolors='indigo', linewidths=0.3, label=year)
     
     # start at origin
-    prev_year = []
-    labels = []
-    for i in range(0, len(releaseDate)):
-        y = releaseDate[i][:4]
-        if y not in prev_year:
-            prev_year.append(y)
-            labels.append(releaseDate[i])
     ax.set_ylim(bottom=0)
-    ax.set_xticks(labels)
+    # ax.set_xticks(monthMarks)
     # label everything
-    ax.set_xlabel('Release Date (YY-MM)')
-    ax.set_ylabel('Billboard Rank')
-    ax.set_title('Album Release Date vs Billboard Rank for Top 100 Songs')
+    ax.set_xlabel('Release Date (MM)')
+    ax.set_ylabel('Number of Billboard Ranking Songs')
+    ax.legend()
+    ax.set_title(f"'Number of Billboard Ranking Songs per Album Release Date as of {prevYear}-{monthMarks[prevMonth]}")
     ax.grid()
 
     # save the graph
