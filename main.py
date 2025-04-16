@@ -9,10 +9,14 @@ from database import (
     song_rank_exists
 )
 
-# Step 1: Get Billboard Top 100 songs
+# Step 1: Initialize the database and create tables (non-destructive)
+create_music_db()
+
+
+# Step 2: Get Billboard Top 100 songs
 billboard_data = top_hundred_songs()
 
-# Step 2: Filter out songs already in the database
+# Step 3: Filter out songs already in the database
 unprocessed_data = {}
 for name, info in billboard_data.items():
     if not song_rank_exists(info['ranking']):
@@ -27,8 +31,6 @@ if not unprocessed_data:
 # Step 3: Get Spotify data for the next 25 unprocessed songs
 song_db, artist_db = fetch_spotify_data(unprocessed_data, limit=25)
 
-# Step 4: Initialize the database and create tables (non-destructive)
-create_music_db()
 
 # Step 5: Insert song and artist data into the database
 for rank, song in song_db.items():
