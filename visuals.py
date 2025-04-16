@@ -140,7 +140,7 @@ def graph_scatter_album_release_rank_num(cur):
     ax.grid()
 
     # save the graph
-    fig.savefig("rank_byalbumRelease.png", bbox_inches='tight')
+    fig.savefig("rank_by_album_release.png", bbox_inches='tight')
 
     # show the graph
     plt.show()    
