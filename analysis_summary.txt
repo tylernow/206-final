@@ -1,4 +1,4 @@
-🎤 Top 10 Artists by # of Top 100 Songs:
+Top 10 Artists by # of Top 100 Songs:
            artist  song_count
 Sabrina Carpenter          16
     Chappell Roan           9
@@ -11,7 +11,7 @@ Sabrina Carpenter          16
         Shaboozey           4
       Teddy Swims           4
 
-🔥 Top 10 Artists by Total Popularity:
+Top 10 Artists by Total Popularity:
            artist  total_popularity
 Sabrina Carpenter              1440
     Chappell Roan               813

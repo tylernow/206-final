@@ -70,9 +70,9 @@ def export_summary_text():
     popular_artists = get_artist_popularity_sum().head(10)
 
     with open("analysis_summary.txt", "w") as f:
-        f.write("🎤 Top 10 Artists by # of Top 100 Songs:\n")
+        f.write("Top 10 Artists by # of Top 100 Songs:\n")
         f.write(top_artists.to_string(index=False))
-        f.write("\n\n🔥 Top 10 Artists by Total Popularity:\n")
+        f.write("\n\nTop 10 Artists by Total Popularity:\n")
         f.write(popular_artists.to_string(index=False))
     print("✅ Summary written to analysis_summary.txt")
 
