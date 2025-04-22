@@ -1,9 +1,33 @@
+"""
+database.py
+
+This module handles all database interactions for the music data project.
+It uses SQLite to create and manage four normalized tables:
+Songs, Albums, Artists, and ArtistTopTracks.
+
+Key Responsibilities:
+- Create database schema
+- Check for existing records
+- Insert new albums, artists, songs, and artist top tracks
+
+Database file: music_data.sqlite
+"""
 import sqlite3
 
 DB_NAME = 'music_data.sqlite'
 
 def create_music_db():
-    """Create SQLite tables for songs, albums, artists, and top tracks if they do not exist."""
+    """
+    Initializes the SQLite database schema.
+
+    Creates four tables:
+    - Albums: id, name, release_date
+    - Artists: id, name
+    - Songs: id, name, rank, popularity, album_id
+    - ArtistTopTracks: id, artist_id, track_name, rank
+
+    If the tables already exist, this function does nothing.
+    """
     conn = sqlite3.connect(DB_NAME)
     cur = conn.cursor()
 
@@ -108,13 +132,16 @@ def insert_artist(name):
 
 def insert_song(name, rank, popularity, album_id):
     """
-    Insert a song into the Songs table.
+    Inserts a song into the Songs table if not already present.
 
     Args:
-        name (str): Song name.
-        rank (int): Billboard rank.
-        popularity (int): Spotify popularity score.
-        album_id (int): FK to Albums table.
+        name (str): Song name
+        rank (int): Billboard rank
+        popularity (int): Spotify popularity score
+        album_id (int): Foreign key referencing the Albums table
+
+    Returns:
+        None
     """
     conn = sqlite3.connect(DB_NAME)
     cur = conn.cursor()
@@ -127,11 +154,14 @@ def insert_song(name, rank, popularity, album_id):
 
 def insert_artist_top_tracks(artist_id, track_list):
     """
-    Insert a list of top tracks for an artist.
+    Inserts a list of top tracks for an artist into the ArtistTopTracks table.
 
     Args:
-        artist_id (int): FK to Artists table.
-        track_list (list): List of track names (max 5).
+        artist_id (int): Foreign key referencing the Artists table
+        track_list (list of str): List of top track names (max 5)
+
+    Returns:
+        None
     """
     conn = sqlite3.connect(DB_NAME)
     cur = conn.cursor()

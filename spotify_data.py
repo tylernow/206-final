@@ -1,9 +1,31 @@
+"""
+spotify_data.py
+
+This module connects to the Spotify Web API using Spotipy and gathers metadata
+for Billboard songs and artists.
+
+Key Functions:
+- Load Spotify API credentials from a file
+- Authenticate with Spotify using Client Credentials Flow
+- Fetch metadata for Billboard songs (album info, popularity)
+- Fetch top 5 tracks for each unique artist
+"""
+
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import time
 
 # Load Spotify credentials
 def load_spotify_credentials(filepath='spotify_credentials.txt'):
+    """
+    Loads Spotify API credentials from a local text file.
+
+    Args:
+        filepath (str): Path to the file containing 'client_id' and 'client_secret'
+
+    Returns:
+        dict: A dictionary with Spotify credentials
+    """
     credentials = {}
     with open(filepath, 'r') as f:
         for line in f:
@@ -12,16 +34,34 @@ def load_spotify_credentials(filepath='spotify_credentials.txt'):
                 credentials[key.strip()] = value.strip()
     return credentials
 
-# Initialize Spotify client
 def get_spotify_client():
+    """
+     Authenticates with the Spotify API and returns a Spotipy client.
+
+    Uses Client Credentials Flow.
+
+    Returns:
+        spotipy.Spotify: Authenticated Spotify API client
+    """
     creds = load_spotify_credentials()
     return spotipy.Spotify(auth_manager=SpotifyClientCredentials(
         client_id=creds.get('client_id'),
         client_secret=creds.get('client_secret')
     ))
 
-# Get Spotify data for top Billboard songs
 def fetch_spotify_data(billboard_data, limit=25):
+    """
+    Queries Spotify for song metadata and artist top tracks.
+
+    Args:
+        billboard_data (dict): Dictionary of Billboard song names and info (ranking, artists)
+        limit (int): Max number of songs to process (default: 25)
+
+    Returns:
+        tuple:
+            song_db (dict): Maps rank to Spotify metadata for each song
+            artist_db (dict): Maps artist name to a list of their top 5 tracks
+    """
     sp = get_spotify_client()
     song_db = {}
     artist_db = {}

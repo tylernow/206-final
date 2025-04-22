@@ -1,3 +1,14 @@
+"""
+analyze.py
+
+This module performs analysis on the normalized SQLite database (music_data.sqlite)
+created from Billboard and Spotify data.
+
+It uses pandas to:
+- Query and transform SQL data for analysis
+- Export a summary text file
+- Provide clean DataFrames for plotting and reporting
+"""
 import sqlite3
 import pandas as pd
 
@@ -5,7 +16,11 @@ DB_NAME = "music_data.sqlite"
 
 def get_rank_vs_popularity():
     """
-    Get Billboard rank vs Spotify popularity.
+    Retrieves each song's Billboard rank and Spotify popularity.
+
+    Returns:
+        pd.DataFrame: Contains two columns - 'rank' and 'popularity'
+
     """
     conn = sqlite3.connect(DB_NAME)
     df = pd.read_sql_query("""
@@ -18,7 +33,10 @@ def get_rank_vs_popularity():
 
 def get_album_release_vs_rank():
     """
-    Get album release date and rank for each song.
+    Retrieves album release dates and ranks for all songs.
+
+    Returns:
+        pd.DataFrame: Contains two columns - 'rank' and 'release_date'
     """
     conn = sqlite3.connect(DB_NAME)
     df = pd.read_sql_query("""
@@ -32,7 +50,10 @@ def get_album_release_vs_rank():
 
 def get_top_artists_by_song_count():
     """
-    Count how many songs each artist has in the Top 100.
+    Counts how many Top 100 songs each artist has.
+
+    Returns:
+        pd.DataFrame: Contains 'artist' and 'song_count'
     """
     conn = sqlite3.connect(DB_NAME)
     df = pd.read_sql_query("""
@@ -48,7 +69,10 @@ def get_top_artists_by_song_count():
 
 def get_artist_popularity_sum():
     """
-    Sum popularity of songs by each artist.
+    Sums Spotify popularity scores for all songs by each artist.
+
+    Returns:
+        pd.DataFrame: Contains 'artist' and 'total_popularity'
     """
     conn = sqlite3.connect(DB_NAME)
     df = pd.read_sql_query("""
@@ -64,7 +88,10 @@ def get_artist_popularity_sum():
 
 def export_summary_text():
     """
-    Write summary stats to a text file.
+    Writes a summary of the top 10 artists by song count and popularity to a text file.
+
+    Output:
+        analysis_summary.txt - Text file containing readable tables
     """
     top_artists = get_top_artists_by_song_count().head(10)
     popular_artists = get_artist_popularity_sum().head(10)

@@ -1,3 +1,20 @@
+"""
+main.py
+
+This script serves as the primary entry point for populating the `music_data.sqlite` database
+with song and artist information from the Billboard Hot 100 and Spotify API.
+
+Steps:
+1. Initializes the database if it doesn't exist.
+2. Scrapes the Billboard Hot 100 chart for the top 100 songs.
+3. Filters out songs already present in the database.
+4. Fetches Spotify metadata for each new song.
+5. Adds new songs, albums, artists, and top tracks into the SQLite database.
+6. Limits the total number of new songs to 25 and top artist tracks to 25 per run.
+
+To populate the full Top 100, run this script multiple times.
+"""
+
 from billboard import top_hundred_songs
 from spotify_data import fetch_spotify_data
 from database import (
