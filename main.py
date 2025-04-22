@@ -44,4 +44,3 @@ for rank, song in song_db.items():
             insert_artist_top_tracks(artist_id, artist_db[artist_name])
 
 print(f"\n✅ Successfully processed and inserted {len(song_db)} new songs into the database.\n")
-print(len(song_db))
